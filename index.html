@@ -622,14 +622,33 @@ His isolation is ruptured years later by the discovery of a solitary human footp
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length >= library.length) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         } catch(e) {}
       }
-      localStorage.setItem('novelverse_books', JSON.stringify(library));
-      return library;
+      return typeof library !== 'undefined' ? library : [];
     }
 
     let catalog = getCatalog();
+
+    // Async Fetch Remote GitHub Library
+    async function syncRemoteLibrary() {
+      try {
+        const res = await fetch('library.json?t=' + Date.now());
+        if (res.ok) {
+          const remoteBooks = await res.json();
+          if (Array.isArray(remoteBooks) && remoteBooks.length > 0) {
+            catalog = remoteBooks;
+            localStorage.setItem('novelverse_books', JSON.stringify(remoteBooks));
+            if (typeof renderGrid === 'function') {
+              renderGrid(catalog);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Could not sync remote library.json:", err);
+      }
+    }
+    syncRemoteLibrary();
     const grid = document.getElementById('bookGrid');
     let currentSize = 1.15;
 
