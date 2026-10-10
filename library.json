@@ -1,5 +1,20 @@
 [
   {
+    "title": "A Red, Red Rose",
+    "author": "Robert Burns",
+    "genre": "Poetry",
+    "year": "1794",
+    "themes": [
+      "Love",
+      "Aging",
+      "Time",
+      "Permanence"
+    ],
+    "fullContent": "O my Luve is like a red, red rose\nThat’s newly sprung in June;\nO my Luve is like the melody\nThat’s sweetly played in tune.\n\nSo fair art thou, my bonnie lass,\nSo deep in luve am I;\nAnd I will luve thee still, my dear,\nTill a’ the seas gang dry.\n\nTill a’ the seas gang dry, my dear,\nAnd the rocks melt wi’ the sun;\nI will love thee still, my dear,\nWhile the sands o’ life shall run.\n\nAnd fare thee weel, my only luve!\nAnd fare thee weel awhile!\nAnd I will come again, my luve,\nThough it were ten thousand mile.",
+    "litchartsAnalysis": "The poem navigates the tension between fleeting physical beauty and eternal devotion through hyperbolic, geological metaphors of endurance. It asserts that while youthful allure is inherently transient, the profound emotional bond it sparks transcends physical decay and mortal limits.",
+    "historicalContext": "Composed in 1794 during the early Romantic period, the lyric reflects the era's focus on intense emotion and pastoral naturalism.\nRobert Burns crafted the work in Anglo-Scots as part of his project to preserve and elevate traditional Scottish folk ballads."
+  },
+  {
     "title": "Ode to the West Wind",
     "author": "Percy Bysshe Shelley",
     "genre": "Poetry",
