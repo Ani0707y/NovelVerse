@@ -213,6 +213,10 @@
           <input type="password" id="geminiApiKey" placeholder="Paste Gemini API Key here...">
           <button onclick="saveApiKey()">Save Key</button>
         </div>
+        <div class="api-row" style="margin-top: 8px;">
+        <input type="password" id="ghToken" placeholder="Paste GitHub Token (ghp_...)" />
+        <button onclick="saveGhToken()">Save Token</button>
+      </div>
       </div>
       
       <div class="drop-box" id="dropArea" onclick="document.getElementById('pdfInput').click()">
@@ -330,6 +334,13 @@
       alert("API Key saved securely in your browser!");
     }
 
+    function saveGhToken() {
+      const token = document.getElementById('ghToken').value.trim();
+      if (!token) return alert("Please enter a valid GitHub Token!");
+      localStorage.setItem('nv_gh_token', token);
+      alert("GitHub Token saved securely in your browser!");
+    }
+    
     // PDF TEXT EXTRACTION
     async function handlePdfUpload(event) {
       const file = event.target.files[0];
@@ -440,7 +451,7 @@ ${pdfText.slice(0, 18000)}`;
       `).join('');
     }
 
-    document.getElementById('bookForm').addEventListener('submit', (e) => {
+    document.getElementById('bookForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const themesArr = document.getElementById('themes').value.split(',').map(t => t.trim()).filter(Boolean);
       const newBook = {
@@ -457,13 +468,82 @@ ${pdfText.slice(0, 18000)}`;
       const books = getCatalog();
       books.unshift(newBook);
       localStorage.setItem('novelverse_books', JSON.stringify(books));
-
+await pushToGitHub(newBook);
+      
       document.getElementById('bookForm').reset();
       document.getElementById('statusMsg').style.display = 'none';
       loadBooksTable();
       alert("Successfully ingested! E-Reader is updated.");
     });
+async function pushToGitHub(newBook) {
+      const token = localStorage.getItem('nv_gh_token');
+      if (!token) {
+        alert("GitHub Token nahi mila! Pehle upar token daal kar save karein.");
+        return;
+      }
 
+      const status = document.getElementById('statusMsg');
+      if (status) {
+        status.style.display = 'block';
+        status.innerText = "Syncing with GitHub repository...";
+      }
+
+      const owner = 'Ani0707y';
+      const repo = 'NovelVerse';
+      const path = 'library.json';
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+
+        let currentData = [];
+        let sha = '';
+
+        if (res.ok) {
+          const fileInfo = await res.json();
+          sha = fileInfo.sha;
+          const contentStr = decodeURIComponent(escape(atob(fileInfo.content)));
+          currentData = JSON.parse(contentStr || '[]');
+        }
+
+        const existingIndex = currentData.findIndex(b => b.title.toLowerCase() === newBook.title.toLowerCase());
+        if (existingIndex >= 0) {
+          currentData[existingIndex] = newBook;
+        } else {
+          currentData.unshift(newBook);
+        }
+
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
+        const putRes = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Add ${newBook.title} via Admin Ingestion`,
+            content: updatedContent,
+            sha: sha
+          })
+        });
+
+        if (putRes.ok) {
+          alert("Success! Book directly GitHub library.json par push ho gayi. Phone par bhi auto-update ho jayega!");
+        } else {
+          const err = await putRes.json();
+          alert("GitHub Push Error: " + err.message);
+        }
+      } catch (err) {
+        alert("Error syncing to GitHub: " + err.message);
+      }
+    }
+    
     function deleteBook(index) {
       if (confirm("Delete this literature work?")) {
         const books = getCatalog();
