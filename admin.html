@@ -369,15 +369,15 @@
     // GEMINI PROMPT & PARSING
     async function processTextWithGemini(pdfText, apiKey) {
       const status = document.getElementById('statusMsg');
-      const prompt = `You are a literature expert. Analyze the following LitCharts document text and extract data strictly in valid JSON format without markdown code fences or backticks:
+      const prompt = `You are an expert literature archivist. Analyze the following LitCharts document text and extract data strictly in valid JSON format without markdown code fences or backticks:
 {
   "title": "Title of the work",
   "author": "Author name",
   "genre": "Poetry or Drama or Adventure or Satire or Fiction",
   "year": "Publication year",
   "themes": ["Theme 1", "Theme 2", "Theme 3"],
-  "fullContent": "A cohesive 3-5 paragraph textual reading excerpt or primary plot overview suitable for in-app reading",
-  "analysis": "LitCharts critical analysis and structural interpretation",
+  "fullContent": "CRITICAL RULE FOR FULL CONTENT: If the genre is Poetry, extract the COMPLETE original poem verses, stanzas, and line breaks as written by the poet, preserving stanza spacing. Do NOT summarize poems. If the genre is Fiction or Drama, provide a cohesive 4-6 paragraph excerpt/scene narrative for reading.",
+  "analysis": "LitCharts critical analysis, symbolism, and structural interpretation",
   "context": "Historical, cultural and author background"
 }
 
