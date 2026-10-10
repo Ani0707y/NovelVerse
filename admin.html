@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovelVerse — Admin Console</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; min-height: 100vh; padding: 2rem 5%; }
+    
+    #lockScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0f172a; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; z-index: 999;
+    }
+    .lock-box {
+      background: #1e293b; padding: 2.5rem; border-radius: 12px;
+      text-align: center; border: 1px solid #334155; width: 90%; max-width: 360px;
+    }
+    .lock-box input {
+      width: 100%; padding: 0.8rem; margin: 1.2rem 0; border-radius: 6px;
+      border: 1px solid #475569; background: #0f172a; color: white; font-size: 1.1rem; text-align: center;
+    }
+    .btn-primary {
+      background: #b45014; color: white; border: none; padding: 0.8rem 1.5rem;
+      border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%;
+    }
+    .btn-primary:hover { background: #933d0c; }
+
+    .admin-container { max-width: 900px; margin: 0 auto; display: none; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #334155; }
+    .header h1 { font-size: 1.8rem; }
+    .header h1 span { color: #b45014; }
+
+    .card { background: #1e293b; padding: 2rem; border-radius: 10px; border: 1px solid #334155; margin-bottom: 2rem; }
+    .card h2 { font-size: 1.3rem; margin-bottom: 1.2rem; color: #cbd5e1; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 0.85rem; color: #94a3b8; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.7rem; border-radius: 6px; border: 1px solid #475569;
+      background: #0f172a; color: white; font-size: 0.95rem; outline: none;
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #334155; font-size: 0.9rem; }
+    th { color: #94a3b8; }
+    .btn-delete { background: #dc2626; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer; }
+    
+    .sync-banner {
+      background: #1e3a8a; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lockScreen">
+    <div class="lock-box">
+      <h2>NovelVerse Admin</h2>
+      <p style="color:#94a3b8; font-size:0.85rem; margin-top:0.3rem;">Authorized access only</p>
+      <input type="password" id="pinInput" placeholder="Enter Security PIN">
+      <button class="btn-primary" onclick="verifyPin()">Unlock Console</button>
+    </div>
+  </div>
+
+  <div class="admin-container" id="adminContent">
+    <div class="header">
+      <h1>Novel<span>Verse</span> Console</h1>
+      <div>
+        <a href="index.html" style="color:#94a3b8; text-decoration:none; margin-right: 1.5rem;">View Live Site ↗</a>
+        <button class="btn-primary" onclick="lockConsole()" style="width: auto; padding: 0.4rem 0.9rem; font-size: 0.85rem;">Lock</button>
+      </div>
+    </div>
+
+    <!-- Quick Export Box -->
+    <div class="sync-banner">
+      <div>
+        <h4 style="font-size:0.95rem;">Export Database for Permanent Code</h4>
+        <p style="font-size:0.8rem; color:#93c5fd;">One-click copy all books to embed permanently in index.html</p>
+      </div>
+      <button class="btn-primary" onclick="copyCatalogCode()" style="width:auto; padding:0.5rem 1rem; background:#2563eb;">📋 Copy Code Array</button>
+    </div>
+
+    <div class="card">
+      <h2>+ Add Literature Entry (LitCharts Format)</h2>
+      <form id="bookForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Novel Title *</label>
+            <input type="text" id="title" required placeholder="e.g. Ode to a Nightingale">
+          </div>
+          <div class="form-group">
+            <label>Author *</label>
+            <input type="text" id="author" required placeholder="e.g. John Keats">
+          </div>
+          <div class="form-group">
+            <label>Genre / Classification *</label>
+            <select id="genre">
+              <option value="Poetry">Poetry</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Satire">Satire</option>
+              <option value="Drama">Drama</option>
+              <option value="Fiction">Fiction</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Publication Year</label>
+            <input type="text" id="year" placeholder="e.g. 1819">
+          </div>
+          <div class="form-group full">
+            <label>Themes (comma-separated)</label>
+            <input type="text" id="themes" placeholder="e.g. Mortality, Transience of Life, Art and Immortality">
+          </div>
+          <div class="form-group full">
+            <label>LitCharts Summary / Analysis *</label>
+            <textarea id="summary" required placeholder="Paste plot summary & core analysis..."></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top: 1rem;">Save to Live Catalog</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Current Literature Database</h2>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Genre</th>
+              <th>Year</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="booksTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SECRET_PIN = "2420";
+
+    const baseBooks = [
+      {
+        title: "Robinson Crusoe",
+        author: "Daniel Defoe",
+        genre: "Adventure",
+        year: "1719",
+        themes: ["Individualism", "Colonialism"],
+        desc: "First published in 1719. Recounts the life of an English castaway surviving 28 years on a remote Caribbean island, reflecting Enlightenment self-reliance."
+      },
+      {
+        title: "Gulliver's Travels",
+        author: "Jonathan Swift",
+        genre: "Satire",
+        year: "1726",
+        themes: ["Human Nature", "Political Satire"],
+        desc: "A seminal four-part satirical narrative charting Lemuel Gulliver's voyages across Lilliput, Brobdingnag, Laputa, and Houyhnhnmland, critiquing European societal institutions."
+      },
+      {
+        title: "Elegy Written in a Country Churchyard",
+        author: "Thomas Gray",
+        genre: "Poetry",
+        year: "1751",
+        themes: ["Mortality", "Obscurity"],
+        desc: "An 18th-century meditative pastoral poem mourning the unhonoured rustic dead buried in a churchyard, meditating on human ambition, virtue, and death."
+      },
+      {
+        title: "Hayavadana",
+        author: "Girish Karnad",
+        genre: "Drama",
+        year: "1971",
+        themes: ["Identity", "Mind vs Body"],
+        desc: "A celebrated modern Indian play utilizing folk Yakshagana conventions to explore the philosophical dilemma of body versus intellect through transposition of heads."
+      }
+    ];
+
+    function verifyPin() {
+      const pin = document.getElementById("pinInput").value;
+      if (pin === SECRET_PIN) {
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("adminContent").style.display = "block";
+        loadBooksTable();
+      } else {
+        alert("Incorrect PIN! Access Denied.");
+      }
+    }
+
+    function lockConsole() {
+      document.getElementById("pinInput").value = "";
+      document.getElementById("lockScreen").style.display = "flex";
+      document.getElementById("adminContent").style.display = "none";
+    }
+
+    function getCatalog() {
+      const saved = localStorage.getItem('novelverse_books');
+      if (!saved) {
+        localStorage.setItem('novelverse_books', JSON.stringify(baseBooks));
+        return baseBooks;
+      }
+      return JSON.parse(saved);
+    }
+
+    function loadBooksTable() {
+      const books = getCatalog();
+      const tbody = document.getElementById('booksTableBody');
+      if (books.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:#94a3b8;'>No books found.</td></tr>";
+        return;
+      }
+      tbody.innerHTML = books.map((b, i) => `
+        <tr>
+          <td><strong>${b.title}</strong></td>
+          <td>${b.author}</td>
+          <td>${b.genre}</td>
+          <td>${b.year || 'N/A'}</td>
+          <td><button class="btn-delete" onclick="deleteBook(${i})">Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('bookForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const themesArr = document.getElementById('themes').value.split(',').map(t => t.trim()).filter(Boolean);
+      const newBook = {
+        title: document.getElementById('title').value.trim(),
+        author: document.getElementById('author').value.trim(),
+        genre: document.getElementById('genre').value,
+        year: document.getElementById('year').value.trim(),
+        themes: themesArr,
+        desc: document.getElementById('summary').value.trim()
+      };
+
+      const books = getCatalog();
+      books.unshift(newBook);
+      localStorage.setItem('novelverse_books', JSON.stringify(books));
+
+      document.getElementById('bookForm').reset();
+      loadBooksTable();
+      alert("Added successfully! To sync with index.html, click 'Copy Code Array' or refresh index.html.");
+    });
+
+    function deleteBook(index) {
+      if (confirm("Delete this literature work?")) {
+        const books = getCatalog();
+        books.splice(index, 1);
+        localStorage.setItem('novelverse_books', JSON.stringify(books));
+        loadBooksTable();
+      }
+    }
+
+    function copyCatalogCode() {
+      const books = getCatalog();
+      const codeStr = "const defaultBooks = " + JSON.stringify(books, null, 2) + ";";
+      navigator.clipboard.writeText(codeStr).then(() => {
+        alert("Copied entire books array! Just replace 'const defaultBooks = [...]' in index.html to make it permanent forever.");
+      });
+    }
+  </script>
+</body>
+</html>

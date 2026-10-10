@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovelVerse — Literary Catalog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 8%; background: #0f2240; color: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .navbar .logo { font-size: 1.45rem; font-weight: 700; letter-spacing: 0.5px; }
+    .navbar .logo span { color: #b45014; }
+    .navbar nav a { color: #cbd5e1; text-decoration: none; margin-left: 1.5rem; font-size: 0.95rem; }
+    .navbar nav a:hover { color: #ffffff; }
+
+    .hero { text-align: center; padding: 3rem 1.5rem 2rem; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+    .hero h1 { font-size: 2.1rem; color: #0f2240; margin-bottom: 0.5rem; }
+    .hero p { color: #64748b; font-size: 1rem; }
+    .search-box { margin: 1.5rem auto 1rem; max-width: 480px; }
+    .search-box input { width: 100%; padding: 0.85rem 1.4rem; border: 1px solid #cbd5e1; border-radius: 25px; font-size: 0.95rem; outline: none; }
+    .search-box input:focus { border-color: #0f2240; box-shadow: 0 0 0 3px rgba(15, 34, 64, 0.12); }
+
+    .filter-group { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-btn { padding: 0.45rem 1.1rem; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: #0f2240; color: #ffffff; border-color: #0f2240; }
+
+    .catalog-section { flex: 1; padding: 2.5rem 8%; }
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.6rem; }
+    .book-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); transition: transform 0.2s; }
+    .book-card:hover { transform: translateY(-3px); }
+    .book-card h3 { font-size: 1.2rem; color: #0f2240; margin-bottom: 0.3rem; }
+    .book-author { font-size: 0.85rem; color: #b45014; font-weight: 600; margin-bottom: 0.6rem; }
+    .badge-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .badge { font-size: 0.72rem; font-weight: 600; background: #f1f5f9; color: #0f2240; padding: 0.2rem 0.55rem; border-radius: 10px; border: 1px solid #e2e8f0; }
+
+    .view-btn { background: #0f2240; color: #ffffff; border: none; padding: 0.65rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+    .view-btn:hover { background: #1e3a8a; }
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 34, 64, 0.6); backdrop-filter: blur(2px); justify-content: center; align-items: center; z-index: 100; }
+    .modal-card { background: #ffffff; padding: 2rem; border-radius: 12px; max-width: 500px; width: 90%; position: relative; }
+    .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer; }
+
+    .footer { text-align: center; padding: 1.5rem; background: #0f2240; color: #94a3b8; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">Novel<span>Verse</span></div>
+    <nav>
+      <a href="#catalog">Catalog</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Explore Timeless English Classics</h1>
+    <p>A curated bibliographic catalog for literature students and readers.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by title or author (e.g. Keats, Defoe, Swift)...">
+    </div>
+    <div class="filter-group">
+      <button class="filter-btn active" data-genre="all">All Works</button>
+      <button class="filter-btn" data-genre="Poetry">Poetry</button>
+      <button class="filter-btn" data-genre="Adventure">Adventure</button>
+      <button class="filter-btn" data-genre="Satire">Satire</button>
+      <button class="filter-btn" data-genre="Drama">Drama</button>
+    </div>
+  </section>
+
+  <main class="catalog-section" id="catalog">
+    <div class="book-grid" id="bookGrid"></div>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h2 id="modalTitle" style="color: #0f2240; margin-bottom: 0.2rem;"></h2>
+      <p id="modalAuthor" style="color: #b45014; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem;"></p>
+      <div id="modalBadges" class="badge-row"></div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0.8rem 0;">
+      <h4 style="font-size: 0.85rem; color: #475569; margin-bottom: 0.4rem; text-transform: uppercase;">LitCharts Synopsis:</h4>
+      <p id="modalDesc" style="color: #334155; line-height: 1.6; font-size: 0.95rem;"></p>
+    </div>
+  </div>
+
+  <footer class="footer" id="about">
+    <p>NovelVerse • Academic Digital Humanities Catalog • SEC-Internship (581201)</p>
+    <p>Department of English, Maharaja College, Ara (VKSU)</p>
+  </footer>
+
+  <script>
+    // Permanent Catalog Dataset (Synced with Keats)
+    const defaultBooks = [
+      {
+        title: "Ode to a Nightingale",
+        author: "John Keats",
+        genre: "Poetry",
+        year: "1819",
+        themes: ["Mortality", "Art and Immortality", "Escapism"],
+        desc: "Written in May 1819, John Keats's seminal Romantic ode depicts a speaker listening to the song of a nightingale, exploring human suffering, transience of life, and artistic eternity."
+      },
+      {
+        title: "Robinson Crusoe",
+        author: "Daniel Defoe",
+        genre: "Adventure",
+        year: "1719",
+        themes: ["Individualism", "Colonialism"],
+        desc: "First published in 1719. Recounts the life of an English castaway surviving 28 years on a remote Caribbean island, reflecting Enlightenment self-reliance."
+      },
+      {
+        title: "Gulliver's Travels",
+        author: "Jonathan Swift",
+        genre: "Satire",
+        year: "1726",
+        themes: ["Human Nature", "Political Satire"],
+        desc: "A seminal four-part satirical narrative charting Lemuel Gulliver's voyages across Lilliput, Brobdingnag, Laputa, and Houyhnhnmland, critiquing European societal institutions."
+      },
+      {
+        title: "Elegy Written in a Country Churchyard",
+        author: "Thomas Gray",
+        genre: "Poetry",
+        year: "1751",
+        themes: ["Mortality", "Obscurity"],
+        desc: "An 18th-century meditative pastoral poem mourning the unhonoured rustic dead buried in a churchyard, meditating on human ambition, virtue, and death."
+      },
+      {
+        title: "Hayavadana",
+        author: "Girish Karnad",
+        genre: "Drama",
+        year: "1971",
+        themes: ["Identity", "Mind vs Body"],
+        desc: "A celebrated modern Indian play utilizing folk Yakshagana conventions to explore the philosophical dilemma of body versus intellect through transposition of heads."
+      }
+    ];
+
+    function getCatalog() {
+      const saved = localStorage.getItem('novelverse_books');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length >= defaultBooks.length) {
+            return parsed;
+          }
+        } catch(e) {}
+      }
+      localStorage.setItem('novelverse_books', JSON.stringify(defaultBooks));
+      return defaultBooks;
+    }
+
+    let catalog = getCatalog();
+    const bookGrid = document.getElementById('bookGrid');
+
+    function displayBooks(items) {
+      if (!items || items.length === 0) {
+        bookGrid.innerHTML = "<p style='color:#64748b; grid-column:1/-1; text-align:center;'>No matching works found.</p>";
+        return;
+      }
+      bookGrid.innerHTML = items.map(function(b) {
+        const origIdx = catalog.findIndex(function(o) { return o.title === b.title; });
+        const themesHtml = (b.themes || []).map(function(t) { return '<span class="badge">' + t + '</span>'; }).join('');
+
+        return `
+          <article class="book-card">
+            <div>
+              <h3>${b.title}</h3>
+              <p class="book-author">By ${b.author} ${b.year ? '(' + b.year + ')' : ''}</p>
+              <div class="badge-row">
+                <span class="badge" style="background:#e0f2fe; color:#0369a1;">${b.genre}</span>
+                ${themesHtml}
+              </div>
+            </div>
+            <button class="view-btn" onclick="openDetails(${origIdx})">View Synopsis</button>
+          </article>
+        `;
+      }).join('');
+    }
+
+    window.openDetails = function(idx) {
+      const b = catalog[idx];
+      if (!b) return;
+      document.getElementById('modalTitle').innerText = b.title;
+      document.getElementById('modalAuthor').innerText = "Author: " + b.author + (b.year ? " | " + b.year : "");
+      document.getElementById('modalDesc').innerText = b.desc;
+      
+      const modalBadgesHtml = '<span class="badge" style="background:#0f2240; color:#fff;">' + b.genre + '</span>' +
+        (b.themes || []).map(function(t) { return '<span class="badge">' + t + '</span>'; }).join('');
+      
+      document.getElementById('modalBadges').innerHTML = modalBadgesHtml;
+      document.getElementById('modalOverlay').style.display = "flex";
+    };
+
+    document.getElementById('closeModal').addEventListener('click', function() {
+      document.getElementById('modalOverlay').style.display = "none";
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = catalog.filter(function(b) { 
+        return (b.title && b.title.toLowerCase().includes(q)) || 
+               (b.author && b.author.toLowerCase().includes(q)) || 
+               (b.genre && b.genre.toLowerCase().includes(q)) ||
+               (b.themes && b.themes.some(function(t) { return t.toLowerCase().includes(q); }));
+      });
+      displayBooks(filtered);
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        const g = btn.dataset.genre;
+        if (g === 'all') {
+          displayBooks(catalog);
+        } else {
+          displayBooks(catalog.filter(function(b) { return b.genre && b.genre.toLowerCase() === g.toLowerCase(); }));
+        }
+      });
+    });
+
+    displayBooks(catalog);
+  </script>
+</body>
+</html>
