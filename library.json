@@ -1,5 +1,19 @@
 [
   {
+    "title": "The Tyger",
+    "author": "William Blake",
+    "genre": "Poetry",
+    "year": "1794",
+    "themes": [
+      "Existence of Evil",
+      "Divine Creation",
+      "Artistic Imagination"
+    ],
+    "fullContent": "Tyger Tyger, burning bright,\nIn the forests of the night;\nWhat immortal hand or eye,\nCould frame thy fearful symmetry?\n\nIn what distant deeps or skies.\nBurnt the fire of thine eyes?\nOn what wings dare he aspire?\nWhat the hand, dare seize the fire?\n\nAnd what shoulder, & what art,\nCould twist the sinews of thy heart?\nAnd when thy heart began to beat,\nWhat dread hand? & what dread feet?\n\nWhat the hammer? what the chain,\nIn what furnace was thy brain?\nWhat the anvil? what dread grasp,\nDare its deadly terrors clasp!\n\nWhen the stars threw down their spears\nAnd water'd heaven with their tears:\nDid he smile his work to see?\nDid he who made the Lamb make thee?\n\nTyger Tyger burning bright,\nIn the forests of the night:\nWhat immortal hand or eye,\nDare frame thy fearful symmetry?",
+    "litchartsAnalysis": "The poem wrestles with the theological paradox of whether a benevolent deity could simultaneously author sublime terror and gentle innocence. Through relentless rhetorical interrogation, it frames creation as a perilous act of industrial and cosmic daring.",
+    "historicalContext": "Composed in 1794 during the British Romantic era as part of Songs of Innocence and of Experience.\nBlake was heavily influenced by the rise of the Industrial Revolution and his own trade as a printmaker and engraver."
+  },
+  {
     "title": "Robinson Crusoe",
     "author": "Daniel Defoe",
     "genre": "Adventure",
