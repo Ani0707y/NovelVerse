@@ -1,5 +1,20 @@
 [
   {
+    "title": "The Chimney Sweeper",
+    "author": "William Blake",
+    "genre": "Poetry",
+    "year": "1789",
+    "themes": [
+      "Childhood Innocence",
+      "Social Exploitation",
+      "Religious Indoctrination",
+      "Mortality"
+    ],
+    "fullContent": "When my mother died I was very young,\nAnd my father sold me while yet my tongue\nCould scarcely cry \"weep! weep! weep! weep!\"\nSo your chimneys I sweep & in soot I sleep.\n\nThere's little Tom Dacre, who cried when his head\nThat curled like a lamb's back, was shaved, so I said,\n\"Hush, Tom! never mind it, for when your head's bare,\nYou know that the soot cannot spoil your white hair.\"\n\nAnd so he was quiet, & that very night,\nAs Tom was a-sleeping he had such a sight!\nThat thousands of sweepers, Dick, Joe, Ned, & Jack,\nWere all of them locked up in coffins of black;\n\nAnd by came an Angel who had a bright key,\nAnd he opened the coffins & set them all free;\nThen down a green plain, leaping, laughing they run,\nAnd wash in a river and shine in the Sun.\n\nThen naked & white, all their bags left behind,\nThey rise upon clouds, and sport in the wind.\nAnd the Angel told Tom, if he'd be a good boy,\nHe'd have God for his father & never want joy.\n\nAnd so Tom awoke; and we rose in the dark\nAnd got with our bags & our brushes to work.\nThough the morning was cold, Tom was happy & warm;\nSo if all do their duty, they need not fear harm.",
+    "litchartsAnalysis": "Blake employs an irony-laden pastoral vision to dramatize how institutional religion placates marginalized children into tolerating lethal socio-economic exploitation. By framing moral docility as divine salvation, the verse exposes the cruel disparity between pastoral childhood ideals and systemic urban brutality.",
+    "historicalContext": "Published in 1789 as part of Songs of Innocence during the dawn of British Romanticism and the Industrial Revolution.\nBlake was galvanized by the rampant, dangerous use of impoverished child labor across 18th-century London's urban chimneys."
+  },
+  {
     "title": "The Tyger",
     "author": "William Blake",
     "genre": "Poetry",
