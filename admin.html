@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovelVerse — AI Autonomous Ingestion</title>
+  <title>NovelVerse — Literary Ingestion Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -168,7 +168,7 @@
       padding: 0.8rem 1rem; background: var(--bg); border: 1px solid var(--border);
       border-radius: 10px; color: var(--text); outline: none;
     }
-    .form-group textarea { font-size: 0.95rem; min-height: 120px; resize: vertical; }
+    .form-group textarea { font-size: 0.95rem; min-height: 100px; resize: vertical; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
@@ -198,7 +198,7 @@
 
   <div class="admin-container" id="adminContent">
     <div class="header-bar">
-      <h1>NOVEL<span>VERSE</span> // AI AUTO-INGESTION</h1>
+      <h1>NOVEL<span>VERSE</span> // LITERARY INGESTION</h1>
       <div class="header-actions">
         <a href="index.html" class="btn-ghost" target="_blank">Open Reader ↗</a>
         <button class="btn-ghost" onclick="lockConsole()">Lock</button>
@@ -208,24 +208,24 @@
     <!-- AI AGENT UPLOAD BOX -->
     <div class="ai-zone">
       <div class="ai-header">
-        <h3><span class="sparkle">✦</span> Gemini AI Auto-Parser</h3>
+        <h3><span class="sparkle">✦</span> Gemini Flash Auto-Synthesizer</h3>
         <div class="api-row">
           <input type="password" id="geminiApiKey" placeholder="Paste Gemini API Key here...">
           <button onclick="saveApiKey()">Save Key</button>
         </div>
         <div class="api-row" style="margin-top: 8px;">
-        <input type="password" id="ghToken" placeholder="Paste GitHub Token (ghp_...)" />
-        <button onclick="saveGhToken()">Save Token</button>
-      </div>
+          <input type="password" id="ghToken" placeholder="Paste GitHub Token (ghp_...)" />
+          <button onclick="saveGhToken()">Save Token</button>
+        </div>
       </div>
       
       <div class="drop-box" id="dropArea" onclick="document.getElementById('pdfInput').click()">
         <input type="file" id="pdfInput" accept="application/pdf" style="display:none;" onchange="handlePdfUpload(event)">
         <div style="font-size:1.8rem;">📄</div>
-        <strong>Click or Drag LitCharts PDF Here</strong>
-        <p>AI will auto-extract title, author, full excerpts, themes, and side notes companion</p>
+        <strong>Click or Drag Academic / Study Guide PDF Here</strong>
+        <p>AI will extract the reading text and generate 4 ultra-crisp flash insights (No bloated essays)</p>
       </div>
-      <div id="statusMsg">Reading PDF text with AI... Please wait 5-10 seconds.</div>
+      <div id="statusMsg">Reading document with AI... Please wait 5-10 seconds.</div>
     </div>
 
     <!-- CODE SYNC BRIDGE BANNER -->
@@ -239,7 +239,7 @@
 
     <!-- AUTO-FILLED FORM -->
     <div class="card">
-      <h2>Ingestion Fields (AI Auto-Fills These)</h2>
+      <h2>Ingestion Fields (Structured Flash Insights)</h2>
       <form id="bookForm">
         <div class="form-grid">
           <div class="form-group">
@@ -265,20 +265,20 @@
             <input type="text" id="year" placeholder="AI will auto-fill...">
           </div>
           <div class="form-group full">
-            <label>Themes & Motifs</label>
-            <input type="text" id="themes" placeholder="Comma-separated themes...">
+            <label>Thematic Tags (Comma-separated, 3 to 5 single keywords)</label>
+            <input type="text" id="themes" placeholder="e.g. Mortality, Art, Escapism, Transience">
           </div>
           <div class="form-group full">
-            <label>Full Excerpt / Reader Text (Play Books Screen) *</label>
-            <textarea id="fullContent" required placeholder="AI will extract major textual passages..."></textarea>
+            <label>Full Excerpt / Reader Canvas Text *</label>
+            <textarea id="fullContent" required style="min-height:160px;" placeholder="Full poem verses or narrative excerpt..."></textarea>
           </div>
           <div class="form-group full">
-            <label>LitCharts Critical Analysis (Side Notes) *</label>
-            <textarea id="analysis" required placeholder="AI will extract plot summary & structural insights..."></textarea>
+            <label>Core Argument & Conflict (Max 2 concise lines) *</label>
+            <textarea id="analysis" required placeholder="Max 2 sharp lines summarizing the philosophical tension or core thesis..."></textarea>
           </div>
           <div class="form-group full">
-            <label>Historical & Cultural Context *</label>
-            <textarea id="context" required placeholder="AI will extract author background & setting..."></textarea>
+            <label>Historical & Cultural Context (At a glance, max 2 lines) *</label>
+            <textarea id="context" required placeholder="Period, catalyst, or key background at a glance..."></textarea>
           </div>
         </div>
         <button type="submit" class="btn-action" style="margin-top:1.5rem;">Confirm & Save to E-Reader</button>
@@ -315,6 +315,8 @@
         document.getElementById("adminContent").style.display = "block";
         const savedKey = localStorage.getItem('novelverse_gemini_key');
         if (savedKey) document.getElementById('geminiApiKey').value = savedKey;
+        const savedToken = localStorage.getItem('nv_gh_token');
+        if (savedToken) document.getElementById('ghToken').value = savedToken;
         loadBooksTable();
       } else {
         alert("Incorrect PIN!");
@@ -361,7 +363,6 @@
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         let fullText = "";
 
-        // Extract first 10 pages max (to fit context efficiently)
         const maxPages = Math.min(pdf.numPages, 10);
         for (let i = 1; i <= maxPages; i++) {
           const page = await pdf.getPage(i);
@@ -369,7 +370,7 @@
           fullText += textContent.items.map(item => item.str).join(" ") + "\n";
         }
 
-        status.innerText = "Step 2/2: Gemini AI is structuring LitCharts data...";
+        status.innerText = "Step 2/2: Gemini AI is generating sharp flash insights...";
         await processTextWithGemini(fullText, apiKey);
       } catch (err) {
         alert("Error reading PDF: " + err.message);
@@ -377,26 +378,31 @@
       }
     }
 
-    // GEMINI PROMPT & PARSING
+    // GEMINI PROMPT & PARSING (STRICT CONCISE FLASH INSIGHTS)
     async function processTextWithGemini(pdfText, apiKey) {
       const status = document.getElementById('statusMsg');
-      const prompt = `You are an expert literature archivist. Analyze the following LitCharts document text and extract data strictly in valid JSON format without markdown code fences or backticks:
+      const prompt = `You are an expert digital humanities literary curator. Analyze the provided study text and extract data strictly in valid JSON format without markdown code fences, backticks, or preamble:
 {
   "title": "Title of the work",
   "author": "Author name",
   "genre": "Poetry or Drama or Adventure or Satire or Fiction",
   "year": "Publication year",
-  "themes": ["Theme 1", "Theme 2", "Theme 3"],
-  "fullContent": "CRITICAL RULE FOR FULL CONTENT: If the genre is Poetry, extract the COMPLETE original poem verses, stanzas, and line breaks as written by the poet, preserving stanza spacing. Do NOT summarize poems. If the genre is Fiction or Drama, provide a cohesive 4-6 paragraph excerpt/scene narrative for reading.",
-  "analysis": "LitCharts critical analysis, symbolism, and structural interpretation",
-  "context": "Historical, cultural and author background"
+  "themes": ["Word1", "Word2", "Word3"],
+  "fullContent": "If genre is Poetry, extract the COMPLETE original poem verses, preserving all stanzas and lines. If Fiction/Drama, provide a cohesive 4-5 paragraph reading passage.",
+  "analysis": "CRITICAL RULE: DO NOT write long paragraphs or plot summaries. Write STRICTLY 2 concise, powerful sentences capturing the core philosophical conflict or literary argument.",
+  "context": "CRITICAL RULE: STRICTLY 2 concise lines mentioning the literary era, date, and key historical or biographical catalyst."
 }
 
-LitCharts text:
+RULES:
+- 'themes' must be 3 to 5 single-word or two-word conceptual tags (e.g. 'Mortality', 'Escapism', 'Social Satire'). DO NOT join themes with 'and'.
+- NEVER mention 'LitCharts' anywhere in the output.
+- Keep 'analysis' and 'context' extremely sharp, high-yield, and easy to read at a glance.
+
+Source Text:
 ${pdfText.slice(0, 18000)}`;
 
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -408,7 +414,7 @@ ${pdfText.slice(0, 18000)}`;
         if (data.error) throw new Error(data.error.message);
 
         let reply = data.candidates[0].content.parts[0].text;
-        reply = reply.replace(/```json/g, "").replace(/```/g, "").trim();
+        reply = reply.replace(/```json/gi, "").replace(/```/gi, "").trim();
         const parsed = JSON.parse(reply);
 
         // Auto-fill form fields
@@ -421,7 +427,7 @@ ${pdfText.slice(0, 18000)}`;
         document.getElementById('analysis').value = parsed.analysis || "";
         document.getElementById('context').value = parsed.context || "";
 
-        status.innerText = "✓ Complete! Fields filled automatically. Click 'Confirm & Save' below.";
+        status.innerText = "✓ Complete! Flash insights extracted. Review and click 'Confirm & Save'.";
       } catch (err) {
         alert("AI Processing Error: " + err.message);
         status.style.display = 'none';
@@ -468,14 +474,14 @@ ${pdfText.slice(0, 18000)}`;
       const books = getCatalog();
       books.unshift(newBook);
       localStorage.setItem('novelverse_books', JSON.stringify(books));
-await pushToGitHub(newBook);
+      await pushToGitHub(newBook);
       
       document.getElementById('bookForm').reset();
       document.getElementById('statusMsg').style.display = 'none';
       loadBooksTable();
-      alert("Successfully ingested! E-Reader is updated.");
     });
-async function pushToGitHub(newBook) {
+
+    async function pushToGitHub(newBook) {
       const token = localStorage.getItem('nv_gh_token');
       if (!token) {
         alert("GitHub Token nahi mila! Pehle upar token daal kar save karein.");
@@ -527,7 +533,7 @@ async function pushToGitHub(newBook) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            message: `Add ${newBook.title} via Admin Ingestion`,
+            message: `Update ${newBook.title} with flash insights`,
             content: updatedContent,
             sha: sha
           })
@@ -557,7 +563,7 @@ async function pushToGitHub(newBook) {
       const books = getCatalog();
       const codeStr = "const library = " + JSON.stringify(books, null, 2) + ";";
       navigator.clipboard.writeText(codeStr).then(() => {
-        alert("Copied full Play Books corpus array! Paste into index.html to make permanent.");
+        alert("Copied full catalog array! Paste into index.html if needed.");
       });
     }
   </script>
