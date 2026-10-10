@@ -1,5 +1,20 @@
 [
   {
+    "title": "Robinson Crusoe",
+    "author": "Daniel Defoe",
+    "genre": "Adventure",
+    "year": "1719",
+    "themes": [
+      "Colonialism",
+      "Providence",
+      "Self-Reliance",
+      "Isolation"
+    ],
+    "fullContent": "Cast ashore as the sole survivor of a devastating shipwreck off an uncharted Caribbean island, Robinson Crusoe confronted the terrifying reality of complete isolation. Overcoming his initial despair, he salvaged provisions, gunpowder, and timber from the stranded vessel before the relentless sea swallowed its remains. He established a secure habitation against a rocky cliff, surrounding it with a sturdy turf wall, and erected a notched wooden cross to measure the passage of lonely days and preserve his connection to civil time.\n\nDeprived of human fellowship, Crusoe turned his energies toward mastering his wild domain through ingenuity, rigorous discipline, and labor. He cultivated patches of salvaged barley and rice, tamed wild goats into manageable herds, and learned to bake bread and fashion crude clay pottery. A violent illness accompanied by a frightening fever-dream forced him into deep spiritual introspection, prompting him to repent his former rebellious wandering, embrace Christianity, and view the untamed island as a providential sanctuary removed from European vice.\n\nThe profound illusion of absolute solitary dominion shattered twenty-three years into his isolation when Crusoe discovered a single human footprint pressed into the sand. The discovery plunged him into profound terror, revealing that indigenous groups periodically visited the shores to perform cannibalistic rites. Balancing self-preservation with moral judgment, Crusoe maintained extreme vigilance until circumstance compelled him to ambush a group of captors, thereby rescuing a young native man whom he named Friday.\n\nCrusoe established absolute authority over Friday, instructing him in English and Christian doctrine while training him as a faithful companion and servant. Together, they navigated further violent encounters with approaching natives, successfully rescuing Friday's father alongside a shipwrecked Spanish sailor. The island dynamic shifted definitively when an English vessel arrived, torn by mutiny; Crusoe outmaneuvered the mutineers, restored the rightful captain, and finally secured passage back to civilization after twenty-eight years of exile.",
+    "litchartsAnalysis": "Defoe's novel articulates the rise of modern economic individualism and colonial dominion through Crusoe's calculated mastery over nature, providence, and indigenous bodies. It stages an ideological reconciliation between merchant capitalism and spiritual salvation, arguing that survival and moral redemption demand the rational subjugation of the wilderness.",
+    "historicalContext": "Published in 1719 during the early Augustan Age, the novel helped establish novelistic realism amidst the expansion of British mercantile imperialism.\nDefoe drew primary biographical inspiration from the widely publicized real-life survival account of privateer Alexander Selkirk, marooned until 1711."
+  },
+  {
     "title": "Ode to a Nightingale",
     "author": "John Keats",
     "genre": "Poetry",
