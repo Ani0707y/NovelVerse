@@ -3,128 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovelVerse — Admin Console</title>
+  <title>NovelVerse — AI Autonomous Ingestion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <!-- PDF.js Library for client-side PDF reading -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #0f172a; color: #f8fafc; min-height: 100vh; padding: 2rem 5%; }
-    
+    :root {
+      --bg: #09090b;
+      --surface: #121215;
+      --surface-elevated: #18181c;
+      --border: #27272a;
+      --text: #f4f4f5;
+      --text-muted: #71717a;
+      --text-dim: #a1a1aa;
+      --accent: #e11d48;
+      --font-ui: 'Space Grotesk', -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      padding: 2.5rem 6%;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
     #lockScreen {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #0f172a; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; z-index: 999;
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      z-index: 999;
     }
+
     .lock-box {
-      background: #1e293b; padding: 2.5rem; border-radius: 12px;
-      text-align: center; border: 1px solid #334155; width: 90%; max-width: 360px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%; max-width: 380px;
     }
+
+    .lock-box .dot {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    .lock-box h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .lock-box p { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1.5rem; }
     .lock-box input {
-      width: 100%; padding: 0.8rem; margin: 1.2rem 0; border-radius: 6px;
-      border: 1px solid #475569; background: #0f172a; color: white; font-size: 1.1rem; text-align: center;
+      width: 100%; padding: 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white; font-family: var(--font-mono);
+      font-size: 1.1rem; text-align: center;
+      outline: none; margin-bottom: 1.2rem;
     }
-    .btn-primary {
-      background: #b45014; color: white; border: none; padding: 0.8rem 1.5rem;
-      border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%;
+
+    .btn-action {
+      background: var(--text); color: var(--bg);
+      border: none; padding: 0.85rem 1.5rem;
+      border-radius: 999px; font-family: var(--font-mono);
+      font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      cursor: pointer; width: 100%; transition: all 0.2s;
     }
-    .btn-primary:hover { background: #933d0c; }
+    .btn-action:hover { opacity: 0.9; }
 
-    .admin-container { max-width: 900px; margin: 0 auto; display: none; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #334155; }
-    .header h1 { font-size: 1.8rem; }
-    .header h1 span { color: #b45014; }
+    .admin-container { max-width: 1000px; margin: 0 auto; display: none; }
 
-    .card { background: #1e293b; padding: 2rem; border-radius: 10px; border: 1px solid #334155; margin-bottom: 2rem; }
-    .card h2 { font-size: 1.3rem; margin-bottom: 1.2rem; color: #cbd5e1; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .header-bar {
+      display: flex; justify-content: space-between;
+      align-items: center; padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .header-bar h1 { font-size: 1.35rem; font-weight: 700; }
+    .header-bar h1 span { color: var(--accent); }
+
+    .header-actions { display: flex; gap: 0.8rem; align-items: center; }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* AI CONFIG & UPLOAD BOX */
+    .ai-zone {
+      background: var(--surface-elevated);
+      border: 1px dashed var(--accent);
+      border-radius: 18px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .ai-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .ai-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .ai-header h3 .sparkle { color: var(--accent); }
+
+    .api-row {
+      display: flex; gap: 0.6rem; align-items: center; width: 100%; max-width: 480px;
+    }
+    .api-row input {
+      flex: 1; padding: 0.6rem 1rem; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; color: white; font-family: var(--font-mono); font-size: 0.8rem; outline: none;
+    }
+    .api-row button {
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      padding: 0.6rem 1rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer;
+    }
+
+    .drop-box {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .drop-box:hover { border-color: var(--accent); background: rgba(225, 29, 72, 0.05); }
+    .drop-box p { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; }
+    #statusMsg { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); display: none; }
+
+    /* FORM */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.2rem; margin-bottom: 2rem;
+    }
+    .card h2 { font-size: 1.15rem; margin-bottom: 1.5rem; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
     .form-group.full { grid-column: 1 / -1; }
-    .form-group label { font-size: 0.85rem; color: #94a3b8; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 0.7rem; border-radius: 6px; border: 1px solid #475569;
-      background: #0f172a; color: white; font-size: 0.95rem; outline: none;
+    .form-group label {
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;
     }
-    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.8rem 1rem; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); outline: none;
+    }
+    .form-group textarea { font-size: 0.95rem; min-height: 120px; resize: vertical; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #334155; font-size: 0.9rem; }
-    th { color: #94a3b8; }
-    .btn-delete { background: #dc2626; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer; }
-    
-    .sync-banner {
-      background: #1e3a8a; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;
-      display: flex; justify-content: space-between; align-items: center;
+    th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    th { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+    .btn-del {
+      background: transparent; border: 1px solid #7f1d1d; color: #ef4444; padding: 0.3rem 0.7rem;
+      border-radius: 6px; font-family: var(--font-mono); font-size: 0.7rem; cursor: pointer;
+    }
+    .btn-copy {
+      background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem;
+      border-radius: 999px; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; cursor: pointer;
     }
   </style>
 </head>
 <body>
 
+  <!-- AUTH SCREEN -->
   <div id="lockScreen">
     <div class="lock-box">
-      <h2>NovelVerse Admin</h2>
-      <p style="color:#94a3b8; font-size:0.85rem; margin-top:0.3rem;">Authorized access only</p>
-      <input type="password" id="pinInput" placeholder="Enter Security PIN">
-      <button class="btn-primary" onclick="verifyPin()">Unlock Console</button>
+      <div class="dot"></div>
+      <h2>NovelVerse Ingestion</h2>
+      <p>Authorized PIN Protocol</p>
+      <input type="password" id="pinInput" placeholder="••••" maxlength="6">
+      <button class="btn-action" onclick="verifyPin()">Unlock Console</button>
     </div>
   </div>
 
   <div class="admin-container" id="adminContent">
-    <div class="header">
-      <h1>Novel<span>Verse</span> Console</h1>
-      <div>
-        <a href="index.html" style="color:#94a3b8; text-decoration:none; margin-right: 1.5rem;">View Live Site ↗</a>
-        <button class="btn-primary" onclick="lockConsole()" style="width: auto; padding: 0.4rem 0.9rem; font-size: 0.85rem;">Lock</button>
+    <div class="header-bar">
+      <h1>NOVEL<span>VERSE</span> // AI AUTO-INGESTION</h1>
+      <div class="header-actions">
+        <a href="index.html" class="btn-ghost" target="_blank">Open Reader ↗</a>
+        <button class="btn-ghost" onclick="lockConsole()">Lock</button>
       </div>
     </div>
 
-    <!-- Quick Export Box -->
-    <div class="sync-banner">
-      <div>
-        <h4 style="font-size:0.95rem;">Export Database for Permanent Code</h4>
-        <p style="font-size:0.8rem; color:#93c5fd;">One-click copy all books to embed permanently in index.html</p>
+    <!-- AI AGENT UPLOAD BOX -->
+    <div class="ai-zone">
+      <div class="ai-header">
+        <h3><span class="sparkle">✦</span> Gemini AI Auto-Parser</h3>
+        <div class="api-row">
+          <input type="password" id="geminiApiKey" placeholder="Paste Gemini API Key here...">
+          <button onclick="saveApiKey()">Save Key</button>
+        </div>
       </div>
-      <button class="btn-primary" onclick="copyCatalogCode()" style="width:auto; padding:0.5rem 1rem; background:#2563eb;">📋 Copy Code Array</button>
+      
+      <div class="drop-box" id="dropArea" onclick="document.getElementById('pdfInput').click()">
+        <input type="file" id="pdfInput" accept="application/pdf" style="display:none;" onchange="handlePdfUpload(event)">
+        <div style="font-size:1.8rem;">📄</div>
+        <strong>Click or Drag LitCharts PDF Here</strong>
+        <p>AI will auto-extract title, author, full excerpts, themes, and side notes companion</p>
+      </div>
+      <div id="statusMsg">Reading PDF text with AI... Please wait 5-10 seconds.</div>
     </div>
 
+    <!-- CODE SYNC BRIDGE BANNER -->
+    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-elevated); padding:1.2rem 1.6rem; border-radius:12px; border:1px solid var(--border); margin-bottom:2rem;">
+      <div>
+        <h4 style="font-size:0.9rem;">Permanent Source Backup</h4>
+        <p style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">One-click copy array to paste into index.html</p>
+      </div>
+      <button class="btn-copy" onclick="copyCatalogCode()">📋 Copy Synced Code Array</button>
+    </div>
+
+    <!-- AUTO-FILLED FORM -->
     <div class="card">
-      <h2>+ Add Literature Entry (LitCharts Format)</h2>
+      <h2>Ingestion Fields (AI Auto-Fills These)</h2>
       <form id="bookForm">
         <div class="form-grid">
           <div class="form-group">
-            <label>Novel Title *</label>
-            <input type="text" id="title" required placeholder="e.g. Ode to a Nightingale">
+            <label>Work Title *</label>
+            <input type="text" id="title" required placeholder="AI will auto-fill...">
           </div>
           <div class="form-group">
             <label>Author *</label>
-            <input type="text" id="author" required placeholder="e.g. John Keats">
+            <input type="text" id="author" required placeholder="AI will auto-fill...">
           </div>
           <div class="form-group">
-            <label>Genre / Classification *</label>
+            <label>Genre *</label>
             <select id="genre">
               <option value="Poetry">Poetry</option>
+              <option value="Drama">Drama</option>
               <option value="Adventure">Adventure</option>
               <option value="Satire">Satire</option>
-              <option value="Drama">Drama</option>
               <option value="Fiction">Fiction</option>
             </select>
           </div>
           <div class="form-group">
             <label>Publication Year</label>
-            <input type="text" id="year" placeholder="e.g. 1819">
+            <input type="text" id="year" placeholder="AI will auto-fill...">
           </div>
           <div class="form-group full">
-            <label>Themes (comma-separated)</label>
-            <input type="text" id="themes" placeholder="e.g. Mortality, Transience of Life, Art and Immortality">
+            <label>Themes & Motifs</label>
+            <input type="text" id="themes" placeholder="Comma-separated themes...">
           </div>
           <div class="form-group full">
-            <label>LitCharts Summary / Analysis *</label>
-            <textarea id="summary" required placeholder="Paste plot summary & core analysis..."></textarea>
+            <label>Full Excerpt / Reader Text (Play Books Screen) *</label>
+            <textarea id="fullContent" required placeholder="AI will extract major textual passages..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>LitCharts Critical Analysis (Side Notes) *</label>
+            <textarea id="analysis" required placeholder="AI will extract plot summary & structural insights..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Historical & Cultural Context *</label>
+            <textarea id="context" required placeholder="AI will extract author background & setting..."></textarea>
           </div>
         </div>
-        <button type="submit" class="btn-primary" style="margin-top: 1rem;">Save to Live Catalog</button>
+        <button type="submit" class="btn-action" style="margin-top:1.5rem;">Confirm & Save to E-Reader</button>
       </form>
     </div>
 
+    <!-- DATABASE TABLE -->
     <div class="card">
-      <h2>Current Literature Database</h2>
+      <h2>Ingested Literary Corpus</h2>
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -144,50 +303,17 @@
 
   <script>
     const SECRET_PIN = "2420";
-
-    const baseBooks = [
-      {
-        title: "Robinson Crusoe",
-        author: "Daniel Defoe",
-        genre: "Adventure",
-        year: "1719",
-        themes: ["Individualism", "Colonialism"],
-        desc: "First published in 1719. Recounts the life of an English castaway surviving 28 years on a remote Caribbean island, reflecting Enlightenment self-reliance."
-      },
-      {
-        title: "Gulliver's Travels",
-        author: "Jonathan Swift",
-        genre: "Satire",
-        year: "1726",
-        themes: ["Human Nature", "Political Satire"],
-        desc: "A seminal four-part satirical narrative charting Lemuel Gulliver's voyages across Lilliput, Brobdingnag, Laputa, and Houyhnhnmland, critiquing European societal institutions."
-      },
-      {
-        title: "Elegy Written in a Country Churchyard",
-        author: "Thomas Gray",
-        genre: "Poetry",
-        year: "1751",
-        themes: ["Mortality", "Obscurity"],
-        desc: "An 18th-century meditative pastoral poem mourning the unhonoured rustic dead buried in a churchyard, meditating on human ambition, virtue, and death."
-      },
-      {
-        title: "Hayavadana",
-        author: "Girish Karnad",
-        genre: "Drama",
-        year: "1971",
-        themes: ["Identity", "Mind vs Body"],
-        desc: "A celebrated modern Indian play utilizing folk Yakshagana conventions to explore the philosophical dilemma of body versus intellect through transposition of heads."
-      }
-    ];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
     function verifyPin() {
-      const pin = document.getElementById("pinInput").value;
-      if (pin === SECRET_PIN) {
+      if (document.getElementById("pinInput").value === SECRET_PIN) {
         document.getElementById("lockScreen").style.display = "none";
         document.getElementById("adminContent").style.display = "block";
+        const savedKey = localStorage.getItem('novelverse_gemini_key');
+        if (savedKey) document.getElementById('geminiApiKey').value = savedKey;
         loadBooksTable();
       } else {
-        alert("Incorrect PIN! Access Denied.");
+        alert("Incorrect PIN!");
       }
     }
 
@@ -197,20 +323,110 @@
       document.getElementById("adminContent").style.display = "none";
     }
 
+    function saveApiKey() {
+      const key = document.getElementById('geminiApiKey').value.trim();
+      if (!key) return alert("Please enter a valid key!");
+      localStorage.setItem('novelverse_gemini_key', key);
+      alert("API Key saved securely in your browser!");
+    }
+
+    // PDF TEXT EXTRACTION
+    async function handlePdfUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const apiKey = localStorage.getItem('novelverse_gemini_key') || document.getElementById('geminiApiKey').value.trim();
+      if (!apiKey) {
+        alert("Pehle upar apni Gemini API Key daal kar 'Save Key' dabao!");
+        return;
+      }
+
+      const status = document.getElementById('statusMsg');
+      status.style.display = 'block';
+      status.innerText = "Step 1/2: Extracting text from PDF...";
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+
+        // Extract first 10 pages max (to fit context efficiently)
+        const maxPages = Math.min(pdf.numPages, 10);
+        for (let i = 1; i <= maxPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          fullText += textContent.items.map(item => item.str).join(" ") + "\n";
+        }
+
+        status.innerText = "Step 2/2: Gemini AI is structuring LitCharts data...";
+        await processTextWithGemini(fullText, apiKey);
+      } catch (err) {
+        alert("Error reading PDF: " + err.message);
+        status.style.display = 'none';
+      }
+    }
+
+    // GEMINI PROMPT & PARSING
+    async function processTextWithGemini(pdfText, apiKey) {
+      const status = document.getElementById('statusMsg');
+      const prompt = `You are a literature expert. Analyze the following LitCharts document text and extract data strictly in valid JSON format without markdown code fences or backticks:
+{
+  "title": "Title of the work",
+  "author": "Author name",
+  "genre": "Poetry or Drama or Adventure or Satire or Fiction",
+  "year": "Publication year",
+  "themes": ["Theme 1", "Theme 2", "Theme 3"],
+  "fullContent": "A cohesive 3-5 paragraph textual reading excerpt or primary plot overview suitable for in-app reading",
+  "analysis": "LitCharts critical analysis and structural interpretation",
+  "context": "Historical, cultural and author background"
+}
+
+LitCharts text:
+${pdfText.slice(0, 18000)}`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        });
+
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+
+        let reply = data.candidates[0].content.parts[0].text;
+        reply = reply.replace(/```json/g, "").replace(/```/g, "").trim();
+        const parsed = JSON.parse(reply);
+
+        // Auto-fill form fields
+        document.getElementById('title').value = parsed.title || "";
+        document.getElementById('author').value = parsed.author || "";
+        document.getElementById('genre').value = parsed.genre || "Fiction";
+        document.getElementById('year').value = parsed.year || "";
+        document.getElementById('themes').value = (parsed.themes || []).join(", ");
+        document.getElementById('fullContent').value = parsed.fullContent || "";
+        document.getElementById('analysis').value = parsed.analysis || "";
+        document.getElementById('context').value = parsed.context || "";
+
+        status.innerText = "✓ Complete! Fields filled automatically. Click 'Confirm & Save' below.";
+      } catch (err) {
+        alert("AI Processing Error: " + err.message);
+        status.style.display = 'none';
+      }
+    }
+
     function getCatalog() {
       const saved = localStorage.getItem('novelverse_books');
-      if (!saved) {
-        localStorage.setItem('novelverse_books', JSON.stringify(baseBooks));
-        return baseBooks;
-      }
-      return JSON.parse(saved);
+      return saved ? JSON.parse(saved) : [];
     }
 
     function loadBooksTable() {
       const books = getCatalog();
       const tbody = document.getElementById('booksTableBody');
       if (books.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:#94a3b8;'>No books found.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--text-muted);'>No books indexed yet.</td></tr>";
         return;
       }
       tbody.innerHTML = books.map((b, i) => `
@@ -219,7 +435,7 @@
           <td>${b.author}</td>
           <td>${b.genre}</td>
           <td>${b.year || 'N/A'}</td>
-          <td><button class="btn-delete" onclick="deleteBook(${i})">Delete</button></td>
+          <td><button class="btn-del" onclick="deleteBook(${i})">Delete</button></td>
         </tr>
       `).join('');
     }
@@ -233,7 +449,9 @@
         genre: document.getElementById('genre').value,
         year: document.getElementById('year').value.trim(),
         themes: themesArr,
-        desc: document.getElementById('summary').value.trim()
+        fullContent: document.getElementById('fullContent').value.trim(),
+        litchartsAnalysis: document.getElementById('analysis').value.trim(),
+        historicalContext: document.getElementById('context').value.trim()
       };
 
       const books = getCatalog();
@@ -241,8 +459,9 @@
       localStorage.setItem('novelverse_books', JSON.stringify(books));
 
       document.getElementById('bookForm').reset();
+      document.getElementById('statusMsg').style.display = 'none';
       loadBooksTable();
-      alert("Added successfully! To sync with index.html, click 'Copy Code Array' or refresh index.html.");
+      alert("Successfully ingested! E-Reader is updated.");
     });
 
     function deleteBook(index) {
@@ -256,9 +475,9 @@
 
     function copyCatalogCode() {
       const books = getCatalog();
-      const codeStr = "const defaultBooks = " + JSON.stringify(books, null, 2) + ";";
+      const codeStr = "const library = " + JSON.stringify(books, null, 2) + ";";
       navigator.clipboard.writeText(codeStr).then(() => {
-        alert("Copied entire books array! Just replace 'const defaultBooks = [...]' in index.html to make it permanent forever.");
+        alert("Copied full Play Books corpus array! Paste into index.html to make permanent.");
       });
     }
   </script>
