@@ -6,7 +6,7 @@
   <title>NovelVerse — The Literary Archive</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #09090b;
@@ -259,7 +259,7 @@
 
     .card-footer span:last-child { color: var(--accent); }
 
-    /* PLAY BOOKS STYLE FULL-SCREEN E-READER */
+    /* FULL-SCREEN E-READER */
     .reader-screen {
       display: none;
       position: fixed;
@@ -304,8 +304,8 @@
       color: var(--text);
       padding: 0.4rem 0.85rem;
       border-radius: 999px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -336,7 +336,7 @@
       overflow: hidden;
     }
 
-    /* READING CANVAS (CENTERED DISTRACTION-FREE) */
+    /* READING CANVAS */
     .reading-canvas {
       flex: 1;
       overflow-y: auto;
@@ -364,7 +364,7 @@
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(4px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
@@ -380,18 +380,18 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 440px;
-      max-width: 90vw;
+      width: 390px;
+      max-width: 88vw;
       height: 100%;
-      background: rgba(18, 18, 24, 0.96);
-      backdrop-filter: blur(20px);
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: -8px 0 35px rgba(0, 0, 0, 0.7);
-      padding: 2.25rem 2rem;
+      background: rgba(14, 14, 18, 0.96);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      padding: 2rem 1.75rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
       transform: translateX(100%);
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 120;
@@ -410,23 +410,24 @@
     }
 
     .sidebar-header {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-weight: 700;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
     }
 
     .close-drawer-btn {
       background: transparent;
       border: none;
-      color: var(--text-dim);
-      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-size: 1.15rem;
       cursor: pointer;
       line-height: 1;
-      padding: 0.25rem;
-      border-radius: 4px;
+      padding: 0.2rem;
       transition: color 0.2s;
     }
 
@@ -434,26 +435,45 @@
       color: var(--text);
     }
 
+    /* MINIMALIST SCHOLARLY CARDS */
     .insight-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-left: 3px solid var(--accent);
-      padding: 1.25rem;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 1.2rem;
+      border-radius: 12px;
     }
 
     .insight-card h4 {
-      font-family: var(--font-mono);
+      font-family: var(--font-ui);
       font-size: 0.75rem;
-      color: var(--text);
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.5rem;
     }
 
     .insight-card p {
-      font-size: 0.92rem;
-      line-height: 1.65;
+      font-family: var(--font-book);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--reader-text);
+    }
+
+    .theme-pill-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.2rem;
+    }
+
+    .theme-badge {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
       color: var(--text-dim);
     }
 
@@ -489,7 +509,7 @@
   <section class="hero">
     <div class="hero-meta">// DIGITAL CLASSICS REPOSITORIUM</div>
     <h2 class="hero-title">Timeless Literary <span>Masterworks</span>. In-depth.</h2>
-    <p class="hero-desc">Read classic works and critical companion insights directly on your browser without leaving the page.</p>
+    <p class="hero-desc">Explore canon literature with interactive critical commentary and historical marginalia directly within the browser.</p>
   </section>
 
   <div class="controls">
@@ -509,7 +529,7 @@
     <div class="grid" id="bookGrid"></div>
   </main>
 
-  <!-- GOOGLE PLAY BOOKS STYLE IN-APP E-READER SCREEN -->
+  <!-- FULL-SCREEN E-READER -->
   <div class="reader-screen" id="readerScreen">
     <div class="reader-toolbar">
       <div class="reader-book-info">
@@ -526,11 +546,9 @@
     </div>
 
     <div class="reader-layout">
-      <!-- Main Reader Area (Clean Centered Focus) -->
+      <!-- Main Reader Area -->
       <div class="reading-canvas">
-        <article class="reading-sheet" id="readingSheet">
-          <!-- Text body rendered here -->
-        </article>
+        <article class="reading-sheet" id="readingSheet"></article>
       </div>
 
       <!-- Backdrop Overlay -->
@@ -539,23 +557,23 @@
       <!-- Slide-Over Drawer for Literary Insights -->
       <aside class="reader-sidebar" id="readerSidebar">
         <div class="sidebar-top-bar">
-          <div class="sidebar-header">// CRITICAL & LITERARY INSIGHTS</div>
+          <div class="sidebar-header">Critical Companion</div>
           <button class="close-drawer-btn" id="btnCloseDrawer" title="Close drawer">✕</button>
         </div>
 
         <div class="insight-card">
-          <h4>Overview & Interpretation</h4>
-          <p id="sideAnalysis">Critical synthesis explaining the core structure and significance of this text.</p>
+          <h4>Core Focus & Interpretation</h4>
+          <p id="sideAnalysis">Textual analysis and significance.</p>
         </div>
 
         <div class="insight-card">
-          <h4>Central Thematic Motifs</h4>
-          <p id="sideThemes">Themes and recurring motifs analysed across the work.</p>
+          <h4>Key Thematic Motifs</h4>
+          <div class="theme-pill-container" id="sideThemesContainer"></div>
         </div>
 
         <div class="insight-card">
           <h4>Historical & Cultural Context</h4>
-          <p id="sideContext">The intellectual and socio-historical environment in which the author produced this work.</p>
+          <p id="sideContext">Historical background and socio-political context.</p>
         </div>
       </aside>
     </div>
@@ -600,7 +618,7 @@ The bird is declared immortal because its voice has touched listeners across hum
 
 [Section VIII]
 The word 'forlorn' suddenly recalls the speaker to reality. The bird's melody fades across meadows and distant streams. Left alone, the poet questions whether the experience was a profound waking vision or an elusive daydream.`,
-        litchartsAnalysis: "Keats examines the acute friction between mortal human affliction and the enduring perfection of art. The nightingale's melody acts as an emblem of beauty immune to disease and decay, confronting human fragility with imaginative transcendence.",
+        litchartsAnalysis: "Examines the acute friction between mortal human affliction and the enduring perfection of art. The nightingale's melody acts as an emblem of beauty immune to disease and decay, confronting human fragility with imaginative transcendence.",
         historicalContext: "Composed in the spring of 1819 at Wentworth Place in Hampstead shortly following the death of Keats's brother Tom from tuberculosis. Keats was himself experiencing early symptoms of the illness that would end his life in 1821."
       },
       {
@@ -608,7 +626,7 @@ The word 'forlorn' suddenly recalls the speaker to reality. The bird's melody fa
         author: "Jonathan Swift",
         year: "1726",
         genre: "Satire",
-        themes: ["Limits of Human Reason", "Political Hypocrisy", "Perspective & Truth", "Misanthropy"],
+        themes: ["Limits of Human Reason", "Political Hypocrisy", "Perspective & Relativism", "Misanthropy"],
         fullContent: `Gulliver's Travels
 By Jonathan Swift (1726)
 
@@ -622,8 +640,8 @@ Moments later, Gulliver is approached by gentle, dignified horses exhibiting rem
 Welcomed into their household, Gulliver describes eighteenth-century European society to his equine master. He explains modern warfare, statecraft, legal contention, and monetary avarice. His host expresses astonishment and sorrow that creatures claiming reason would employ their faculties to multiply destruction and pursue trivial luxuries.
 
 Gradually, Gulliver experiences a profound revulsion toward human frailties and identifies fully with the rational virtue of the Houyhnhnms. When council decree forces him to depart, he returns to England permanently changed, unable to bear the presence of his family and preferring the companionship of stable horses.`,
-        litchartsAnalysis: "Swift deploys biting irony to question the Enlightenment confidence in human rationality. By juxtaposing brute Yahoos against noble horses, the text unmasks societal arrogance, moral hypocrisy, and political pretension.",
-        historicalContext: "Written during a turbulent era of Whig-Tory rivalry in Britain while Swift served as Dean of St. Patrick's in Dublin. His critique challenges imperial self-congratulation and philosophical vanity."
+        litchartsAnalysis: "A profound meditation on perspective, pride, and philosophical relativism. Swift deploys biting satire to challenge Enlightenment optimism, contrasting visceral human depravity against unattainable absolute reason.",
+        historicalContext: "Written in Dublin during turbulent Tory-Whig tensions. The text satirizes contemporary European travelogues, imperial arrogance, and British parliamentary controversies under King George I."
       },
       {
         title: "Elegy Written in a Country Churchyard",
@@ -786,8 +804,18 @@ His isolation is ruptured years later by the discovery of a solitary human footp
       document.getElementById('rTitle').innerText = book.title;
       document.getElementById('rMeta').innerText = `${book.author.toUpperCase()} • ${book.year || 'N/A'} • ${book.genre.toUpperCase()}`;
       document.getElementById('readingSheet').innerText = book.fullContent || book.desc || 'Text being indexed.';
-      document.getElementById('sideAnalysis').innerText = book.litchartsAnalysis || book.analysis || 'Comprehensive analysis in progress.';
-      document.getElementById('sideThemes').innerText = (book.themes || []).join(' • ');
+      
+      // Clean analysis text
+      let rawAnalysis = book.litchartsAnalysis || book.analysis || 'Comprehensive analysis in progress.';
+      rawAnalysis = rawAnalysis.replace(/^LitCharts examines\s*/i, 'Examines ');
+      document.getElementById('sideAnalysis').innerText = rawAnalysis;
+
+      // Render Themes as interactive badges
+      const themeContainer = document.getElementById('sideThemesContainer');
+      if (themeContainer) {
+        themeContainer.innerHTML = (book.themes || []).map(t => `<span class="theme-badge">${t}</span>`).join('');
+      }
+
       document.getElementById('sideContext').innerText = book.historicalContext || 'Historical background being indexed.';
 
       closeNotesDrawer();
@@ -801,7 +829,7 @@ His isolation is ruptured years later by the discovery of a solitary human footp
       document.body.style.overflow = 'auto';
     });
 
-    // Font Size Controls (A- / A+)
+    // Font Controls
     document.getElementById('btnFontPlus').addEventListener('click', () => {
       if (currentSize < 1.7) {
         currentSize += 0.1;
@@ -838,7 +866,7 @@ His isolation is ruptured years later by the discovery of a solitary human footp
       });
     });
 
-    // Render on load
+    // Initial render
     renderGrid(catalog);
   </script>
 </body>
