@@ -1,5 +1,21 @@
 [
   {
+    "title": "Frankenstein, or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "genre": "Fiction",
+    "year": "1818",
+    "themes": [
+      "Isolation",
+      "Ambition",
+      "Nature",
+      "Revenge",
+      "Fallibility"
+    ],
+    "fullContent": "Robert Walton, the captain of an exploratory vessel charting unknown waters toward the North Pole, encounters a dying, emaciated traveler adrift upon an ice sheet. Rescued by the crew, Victor Frankenstein slowly recovers enough strength to impart a harrowing cautionary tale of scientific obsession. Reared in an affectionate and idyllic Genevan household alongside his adopted companion Elizabeth Lavenza, Victor departed for the University of Ingolstadt consumed by the ambition to master the deepest secrets of natural philosophy. Solitary laboratory experiments culminated in his discovery of the principle of vitality, impelling him to construct and animate a giant humanoid form from assembled charnel matter.\n\nYet the instant the creature opened its dull yellow eye, Victor recoiled in profound horror from its wretched countenance and fled his workshop, abandoning the bewildered newborn life to the elements. Victor returned home hoping his monstrous transgression had dissolved, but tragedy soon struck when his young brother William was brutally strangled and an innocent family ward, Justine Moritz, was executed for the crime. Wracked with subterranean guilt and realizing his horrific creation was the true killer, Victor retreated into the sublime heights of the Swiss Alps. There, amid the desolate glacial slopes, the creature confronted his maker, displaying astonishing eloquence as he detailed his lonely agony, his desperate rejection by human society, and his demand for an artificial mate to share his bitter exile.\n\nVictor reluctantly conceded to manufacture a female companion on a remote Scottish island, yet horror at the prospective horrors of a proliferating monstrous lineage compelled him to tear the unfinished form to pieces before the creature's watchful gaze. Swearing devastating retribution and promising to accompany Victor on his impending wedding night, the monster murdered Victor's devoted friend Henry Clerval and cast suspicion on Victor himself. Although acquitted and returned to Geneva to marry Elizabeth, Victor fatally misunderstood the fiend's vow; during their wedding night, the monster infiltrated their bridal chamber and strangled Elizabeth, driving Victor's father to an early grave from unendurable grief.\n\nStripped of every domestic affection and entirely alone in the world, Victor pledged the remainder of his broken existence to tracking down and annihilating his vengeful creation across the desolate wastes of the Arctic. After recounting this harrowing descent into self-destruction, Victor succumbs to exhaustion and dies aboard Walton's icebound ship. In the final hours of the voyage, Walton discovers the remorseful monster weeping bitterly over his creator's frozen corpse, lamenting the relentless cycle of alienation and malice that ruined them both before vanishing into darkness and distance to extinguish his own miserable spark of life.",
+    "litchartsAnalysis": "The narrative operates as an indictment of intellectual hubris, asserting that unbridled scientific ambition detached from social and moral accountability inevitably breeds ruin. Through the mirrored destinies of creator and creature, Shelley demonstrates that violent depravity is not inherent to existence, but is rather the catastrophic consequence of societal ostracism and denied empathy.",
+    "historicalContext": "Published in 1818 during the height of the Romantic era, the novel emerged as a direct Gothic counter-reaction against the Enlightenment's blind faith in technological and rational progress. Its inception was catalyzed by the famous 1816 ghost story competition among Lord Byron, Percy Bysshe Shelley, and Mary Shelley during the stormy 'Year Without a Summer' in Switzerland."
+  },
+  {
     "title": "Kubla Khan",
     "author": "Samuel Taylor Coleridge",
     "genre": "Poetry",
