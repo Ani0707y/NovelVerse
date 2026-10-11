@@ -170,13 +170,22 @@
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      transition: all 0.2s ease;
     }
 
-    .pill:hover, .pill.active {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-      font-weight: 700;
+    .pill:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Refined Aesthetic Active Pill (No harsh white bulb) */
+    .pill.active {
+      background: rgba(225, 29, 72, 0.16);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 600;
+      box-shadow: 0 0 14px rgba(225, 29, 72, 0.28);
     }
 
     /* CATALOG */
@@ -511,7 +520,7 @@
         padding: 1rem 5%;
       }
       .tagline {
-        display: none; /* Prevent overlap with NovelVerse title */
+        display: none;
       }
       .hero {
         padding: 2.2rem 5% 1.5rem;
@@ -562,9 +571,9 @@
     <div class="filter-pills">
       <button class="pill active" data-genre="all">ALL WORKS</button>
       <button class="pill" data-genre="Poetry">POETRY</button>
+      <button class="pill" data-genre="Gothic">GOTHIC</button>
       <button class="pill" data-genre="Adventure">ADVENTURE</button>
       <button class="pill" data-genre="Satire">SATIRE</button>
-      <button class="pill" data-genre="Drama">DRAMA</button>
     </div>
   </div>
 
@@ -630,6 +639,20 @@
   <script>
     const library = [
       {
+        title: "Frankenstein, or, The Modern Prometheus",
+        author: "Mary Shelley",
+        year: "1818",
+        genre: "Gothic",
+        themes: ["Isolation", "Ambition", "Nature", "Fallibility", "Revenge"],
+        fullContent: `Robert Walton, the captain of an exploratory vessel charting unknown waters toward the North Pole, encounters a dying, emaciated traveler adrift upon an ice sheet. Rescued by the crew, Victor Frankenstein slowly recovers enough strength to impart a harrowing cautionary tale of scientific obsession.
+
+Reared in an affectionate and idyllic Genevan household alongside his adopted companion Elizabeth Lavenza, Victor departed for the University of Ingolstadt consumed by the ambition to master the deepest secrets of natural philosophy. Solitary laboratory experiments culminated in his discovery of the principle of vitality, impelling him to construct and animate a giant humanoid form from assembled charnel matter.
+
+Yet the instant the creature opened its dull yellow eye, Victor recoiled in profound horror from his creation, abandoning the monster to the outside world. The creature, finding itself universally abhorred and violently cast out by human society despite its benevolent nature, gradually turns toward bitter vengeance against its neglectful architect.`,
+        litchartsAnalysis: "Examines the dangerous hubris of unchecked intellectual ambition and patriarchal creation without responsibility. Shelley subverts Romantic individualism by demonstrating how social rejection transforms benevolent innocence into monstrous violence.",
+        historicalContext: "Conceived during the legendary 'Year Without a Summer' of 1816 at Villa Diodati near Lake Geneva amid galvanic experiments, scientific revolutions, and the early tremors of industrialism."
+      },
+      {
         title: "Ode to a Nightingale",
         author: "John Keats",
         year: "1819",
@@ -691,7 +714,7 @@ Gradually, Gulliver experiences a profound revulsion toward human frailties and 
         author: "Thomas Gray",
         year: "1751",
         genre: "Poetry",
-        themes: ["Equality in Death", "Uncelebrated Dignity", "Vanity of Ambition", "Memory"],
+        themes: ["Mortality", "Social Inequality", "Memory", "Obscurity"],
         fullContent: `Elegy Written in a Country Churchyard
 By Thomas Gray (1751)
 
@@ -704,36 +727,15 @@ Standing amidst the grassy burial mounds of the parish churchyard, the speaker m
 The poem cautions the wealthy and powerful against disdaining humble labor. Elaborate tombs and flattering epitaphs cannot revive the departed or turn back the reality of mortality. Within this neglected ground may lie potential leaders, poets, or scholars whose talents remained undeveloped due to poverty and isolation.
 
 The speaker concludes that an obscure life, free from grand political ambition and public betrayal, carries its own quiet integrity, sheltered from the noisy corruptions of public affairs.`,
-        litchartsAnalysis: "Gray creates a meditative bridge between neoclassical decorum and romantic sensibility. By honoring the quiet dignity of the rural poor, the poem democratizes memory and questions the permanence of worldly power.",
-        historicalContext: "Published in 1751, this landmark work became central to the Graveyard School of English poetry, reflecting growing interest in interiority, pastoral reflection, and social empathy."
-      },
-      {
-        title: "Hayavadana",
-        author: "Girish Karnad",
-        year: "1971",
-        genre: "Drama",
-        themes: ["Search for Wholeness", "Mind vs Body", "Identity", "Desire"],
-        fullContent: `Hayavadana
-By Girish Karnad (1971)
-
-[Dramatic Synopsis]
-
-The play opens with a Bhagavata offering invocation to Lord Ganesha, the elephant-headed deity symbolizing incompletion and paradox. A distressed man with a horse's head, Hayavadana, appears seeking a way to attain a complete form.
-
-The core dramatic narrative centers on Devadatta, an intellectual poet, and his close companion Kapila, an athletic ironsmith. Devadatta falls in love with and marries the spirited Padmini, yet an unspoken attraction lingers between Padmini and the muscular Kapila.
-
-During a journey to the fair at Ujjain, tension culminates at a Kali temple. Overcome with inner conflict, Devadatta secretly sacrifices his life. Finding his companion fallen, Kapila follows suit. Distraught, Padmini prays to the Goddess Kali, who grants their resurrection.
-
-In bewildered haste, Padmini accidentally places Devadatta's head on Kapila's muscular torso, and Kapila's head on Devadatta's body. The narrative follows the resulting existential dilemma: Which body is her lawful husband? Does identity belong to the mind or the physical form?`,
-        litchartsAnalysis: "Karnad utilizes folk theatrical conventions from Yakshagana to scrutinize human desires for perfection and wholeness. The transposition of heads serves as an allegory for philosophical conflicts between intellectual identity and bodily impulse.",
-        historicalContext: "Produced in the post-independence modern Indian theatrical movement, adapting an ancient Sanskrit tale through Thomas Mann's novella to explore modern existential themes."
+        litchartsAnalysis: "The poem democratizes mortality by asserting that worldly prestige and pastoral obscurity meet an identical end in the leveling silence of death. It simultaneously dignifies the unrecorded potential of the rural poor.",
+        historicalContext: "Written in the mid-18th-century Graveyard School tradition, capturing the cultural transition from formal neoclassical hierarchy toward early Romantic sympathy for ordinary human lives."
       },
       {
         title: "Robinson Crusoe",
         author: "Daniel Defoe",
         year: "1719",
         genre: "Adventure",
-        themes: ["Resourcefulness", "Solitary Survival", "Colonial Dominion", "Providence"],
+        themes: ["Colonialism", "Providence", "Self-Reliance", "Isolation"],
         fullContent: `Robinson Crusoe
 By Daniel Defoe (1719)
 
